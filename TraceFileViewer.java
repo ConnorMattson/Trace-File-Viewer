@@ -93,6 +93,7 @@ public class TraceFileViewer extends JFrame {
 
     private Graph graphPanel;
 
+
 	public TraceFileViewer() {
 		super("Trace File Viewer");
 		setLayout(new FlowLayout());
@@ -150,6 +151,38 @@ public class TraceFileViewer extends JFrame {
 						File filename = fileChooser.getSelectedFile();
 						
 						try (Scanner scanner = new Scanner(filename)) {
+							sourceList = new HashMap<Integer, ArrayList>();
+							destinationList = new HashMap<Integer, ArrayList>();
+							while (scanner.hasNextLine()) {
+								String line = scanner.nextLine();
+
+								if (line.matches(".*192\\.168\\.0\\..*")) {
+									String[] splitLine = line.split("\t");
+									short packetSize = Short.parseShort(splitLine[7]);
+									if (packetSize > 0) {
+									
+										int sourceIP = Packet.stringToIP(splitLine[2]);
+										int destinationIP = Packet.stringToIP(splitLine[4]);
+										Packet currentPacket = new Packet(sourceIP, destinationIP, packetSize, Float.parseFloat(splitLine[1]));
+
+										// Updates source list
+										if (sourceList.containsKey(sourceIP)) sourceList.get(sourceIP).add(currentPacket);
+										else {
+											ArrayList<Packet> thisIPArrayList = new ArrayList<Packet>();
+											thisIPArrayList.add(currentPacket);
+											sourceList.put(sourceIP, thisIPArrayList);
+										}
+
+										// Updates destination list
+										if (sourceList.containsKey(destinationIP)) sourceList.get(destinationIP).add(currentPacket);
+										else {
+											ArrayList<Packet> thisIPArrayList = new ArrayList<Packet>();
+											thisIPArrayList.add(currentPacket);
+											destinationList.put(destinationIP, thisIPArrayList);
+										}
+									}
+								}	
+							}
 						
 						}
 						
@@ -440,6 +473,15 @@ public class TraceFileViewer extends JFrame {
 		// Sets up the selection box
 		ipSelectionComboBox.removeAllItems();
 
+		Set<Integer> ipSet;
+		if (radioButtonSourceHosts.isSelected()) ipSet = sourceList.keySet();
+		else ipSet = destinationList.keySet();
+		List<Integer> ipList = new ArrayList<Integer>(ipSet);
+		Collections.sort(ipList);
+
+		for (Integer ip : ipList) {
+			ipSelectionComboBox.addItem(Packet.ipToString(ip));
+		}
 	}
 
 	private void updateGraph() {
