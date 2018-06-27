@@ -7,13 +7,18 @@ import java.awt.Color;
 public class Graph extends JPanel {
 	private ArrayList<Packet> currentData;
     private int largestXValue = 900;
-    private int largestYValue = 0;
+    private double largestYValue = 0;
     private int intervalLength = 2;
     private ArrayList<Integer> dataSizes = new ArrayList<Integer>();
     private int startingXValue = 0;
     private Color primaryColor = new Color(0,0,0);
     private Color secondaryColor = new Color(100,100,100);
 
+    /**
+    * Passes new data to the graph to be displayed
+    *
+    * @param  selectedData  An arraylist containing the packets that should be analysed
+    */
     public void setData(ArrayList<Packet> selectedData) {
     	currentData = selectedData;
         largestXValue = (int)(currentData.get(currentData.size()-1).time);
@@ -21,6 +26,9 @@ public class Graph extends JPanel {
         getYValues();
     }
 
+    /**
+    * Clears the graph
+    */
     public void clearData() {
     	currentData = new ArrayList<Packet>();
         dataSizes = new ArrayList<Integer>();
@@ -28,15 +36,9 @@ public class Graph extends JPanel {
         largestYValue = 0;
     }
 
-    public void setIntervalSize(int size) {
-        intervalLength = size;
-        getYValues();
-    }
-
-    public int getIntervalSize(int size) {
-        return intervalLength;
-    }
-
+    /**
+    * Computes the values that need to be displayed
+    */
     private void getYValues() {
         int thisIntervalsTotal = 0;
         int intervalNumber = 0;
@@ -45,6 +47,7 @@ public class Graph extends JPanel {
         largestYValue = 0;
 
         for (Packet currentPacket: currentData) {
+            // If the  packet occured within the current interval
             if (currentPacket.time < (intervalNumber + 1) * intervalLength) {
                 thisIntervalsTotal += currentPacket.size;
             }
@@ -54,6 +57,7 @@ public class Graph extends JPanel {
                 intervalNumber += 1;
                 if (thisIntervalsTotal > largestYValue) largestYValue = thisIntervalsTotal;
 
+                // Skip any intervals between the current interval and the last interval
                 while (currentPacket.time > (intervalNumber + 1) * intervalLength) {
                     dataSizes.add(0);
                     intervalNumber += 1;
@@ -70,6 +74,7 @@ public class Graph extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
+        // draw axis
         g.drawLine(50, 25, 50, 275);
         g.drawLine(45, 275, 955, 275);
 
@@ -77,35 +82,16 @@ public class Graph extends JPanel {
         int dataBetweenTicks = (int)Math.ceil(largestXValue/14.0);
         int charWidth = 3;
 
+        // Draw x ticks
         for (int tick = 0; tick <= 14; tick += 1) {
         	g.drawLine(tick*pixelsBetweenTicks + 50, 275, tick*pixelsBetweenTicks + 50, 280);
             String tickLabel = Integer.toString(dataBetweenTicks*tick + startingXValue);
         	g.drawString(tickLabel, tick*pixelsBetweenTicks + 50 - tickLabel.length()*3, 295);
         }
 
-
+        // Draws axis labels
         g.drawString("Time [s]", 500-35, 315);
-        int labelDivisor = 1;
-        if (largestYValue >= 10000) {
-
-            if (largestYValue >= 10000000) {
-                if (largestYValue >= 10000000) {
-                    labelDivisor = 1000000;
-                    g.drawString("Volume [gigabytes]", 25, 10);
-                }
-                else {
-                    labelDivisor = 1000000;
-                    g.drawString("Volume [megabytes]", 25, 10);
-                }
-            }
-            else {
-                labelDivisor = 1000;
-                g.drawString("Volume [kilobytes]", 25, 10);
-            }
-        }
-        else {
-            g.drawString("Volume [bytes]", 25, 10);
-        }
+        g.drawString("Volume [bytes]", 25, 10);
         g.drawString("0", 35, 280);
 
         if (dataSizes.size() > 0) {
@@ -127,14 +113,25 @@ public class Graph extends JPanel {
                     dataNumber++;
                 }
             }
-
-            // Draws Y-axis
+            
+            // Draws Y-ticks
+            String[] labels = { "", "k", "M", "G", "T" };
             for (int tick = 1; tick <= 6; tick += 1) {
                 g.drawLine(45, 275 - tick*50, 50, 275 - tick*50);
-                String tickLabel = Integer.toString(largestYValue/labelDivisor/5*tick);
-                g.drawString(tickLabel, 38 - tickLabel.length()*6, 280 - tick*50);
+
+                int order = 0;
+                double valueToDisplay = largestYValue/5*tick;
+                while (valueToDisplay >= 1000) {
+                    valueToDisplay /= 1000;
+                    order += 1;
+                }
+                
+                String tickLabel;
+                if (valueToDisplay >= 100) tickLabel = String.format("%.0f%s", valueToDisplay, labels[order]);
+                else tickLabel = String.format("%.1f%s", valueToDisplay, labels[order]);
+                
+                g.drawString(tickLabel, 40 - tickLabel.length()*6, 280 - tick*50);
             }
         }
-        
     }
 }
