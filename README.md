@@ -5,11 +5,11 @@ Our network lab hosts the Auckland Satellite Simulator (http://sde.blogs.aucklan
 We use it to simulate Internet traffic to small Pacific islands that are connected
 to the rest of the world via a satellite link.
 
-To do this, the simulator has a number of machines (ìsource hostsî) on the
-ìworld sideî of the simulated satellite link that transmit data in the form of small
+To do this, the simulator has a number of machines (‚Äúsource hosts‚Äù) on the
+‚Äúworld side‚Äù of the simulated satellite link that transmit data in the form of small
 packets of up to 1500 bytes. These packets travel via a simulated
-satellite link to the ìisland sideî. Once on the island side, each packet ends up at
-a machine there. These machines are called ìdestination hostsî.
+satellite link to the ‚Äúisland side‚Äù. Once on the island side, each packet ends up at
+a machine there. These machines are called ‚Äúdestination hosts‚Äù.
 
 The simulated satellite link delays packets and occasionally throws some away
 when there are more packets arriving that it can deal with at the moment. When
@@ -32,16 +32,18 @@ Three trace files have been included for demonstration purposes: a tiny one with
 lines, a small one with 148315 lines, and a large one with 651274 lines.
 An example of some data is shown below.
 
-108860 128.879102000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 Ö
-108861 128.879885000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 Ö
-108862 128.880603000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 Ö
-108863 128.881481000 192.168.0.15 8000 10.0.1.25 59590 66 52 0 Ö
-108864 128.881481000 192.168.0.9 8000 10.0.1.15 42081 66 52 0 Ö
-108865 128.881481000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 Ö
-108866 128.881495000 192.168.0.15 8000 10.0.1.25 59590 66 52 0 Ö
-108867 128.882148000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 Ö
-108868 128.882905000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 Ö
-108869 128.883800000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 Ö
+```
+108860 128.879102000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 ‚Ä¶
+108861 128.879885000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 ‚Ä¶
+108862 128.880603000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 ‚Ä¶
+108863 128.881481000 192.168.0.15 8000 10.0.1.25 59590 66 52 0 ‚Ä¶
+108864 128.881481000 192.168.0.9 8000 10.0.1.15 42081 66 52 0 ‚Ä¶
+108865 128.881481000 192.168.0.24 47928 10.0.0.5 5201 1514 1500 1448 ‚Ä¶
+108866 128.881495000 192.168.0.15 8000 10.0.1.25 59590 66 52 0 ‚Ä¶
+108867 128.882148000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 ‚Ä¶
+108868 128.882905000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 ‚Ä¶
+108869 128.883800000 192.168.0.3 8000 10.0.1.4 55442 1514 1500 1448 ‚Ä¶
+```
 
 The lines here have been truncated to be able to accommodate them on the
 page, but they show all the data you will need. Each line consists of a number of
@@ -59,18 +61,18 @@ source and destination. Each IP address consists of four decimal numbers
 between 0 and 255 separated by dots (full stops).
 
 The trace files here only show packets heading towards destination hosts on the
-island side, so all source host IP addresses start with ì192.168.0.î, indicating
-that they are ìworld sideî addresses.
+island side, so all source host IP addresses start with ‚Äú192.168.0.‚Äù, indicating
+that they are ‚Äúworld side‚Äù addresses.
 
 The fifth field is the IP address of the destination host from the island network.
-All of the island addresses start with ì10.0.î.
+All of the island addresses start with ‚Äú10.0.‚Äù.
 
 The fourth and the sixth field are the TCP ports on the hosts that the respective
 packets travel between. They identify the applications that have sent or would
 have received the packets.
 
-Fields 7, 8 and 9 are packet sizes in bytes. The size weíre interested in here is
-that in field 8, itís the IP packet size. The size in field 7 is that of the whole
+Fields 7, 8 and 9 are packet sizes in bytes. The size we‚Äôre interested in here is
+that in field 8, it‚Äôs the IP packet size. The size in field 7 is that of the whole
 Ethernet frame that contains the IP packet, and field 9 is the TCP payload size
 (the size of the content of the IP packet).
 
