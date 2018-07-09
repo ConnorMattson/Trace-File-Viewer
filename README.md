@@ -1,9 +1,9 @@
 # Trace File Viewer
 
 
-Our network lab hosts the Auckland Satellite Simulator (http://sde.blogs.auckland.ac.nz/).
-We use it to simulate Internet traffic to small Pacific islands that are connected
-to the rest of the world via a satellite link.
+The University of Auckland Computer Sciencenetwork lab hosts the Auckland Satellite Simulator
+(http://sde.blogs.auckland.ac.nz/). It is used to simulate Internet traffic to small Pacific
+islands that are connected to the rest of the world via a satellite link.
 
 To do this, the simulator has a number of machines (“source hosts”) on the
 “world side” of the simulated satellite link that transmit data in the form of small
@@ -21,7 +21,7 @@ packets. It stores summary information about each packet in a trace file. The
 trace file is plain text and each line contains the record for exactly one packet
 (more on the file format in the next section).
 
-What we would like to be able to do is get a graphical display of how much data
+Trace File Viewer gets a graphical display of how much data
 comes from a particular source host over time, or how much data goes to a
 particular destination host over the course of an experiment. Experiments
 typically take between 90 seconds and about 11 minutes.
