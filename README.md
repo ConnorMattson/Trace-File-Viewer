@@ -1,7 +1,7 @@
 # Trace File Viewer
 
 
-The University of Auckland Computer Sciencenetwork lab hosts the Auckland Satellite Simulator
+The University of Auckland Computer Science network lab hosts the Auckland Satellite Simulator
 (http://sde.blogs.auckland.ac.nz/). It is used to simulate Internet traffic to small Pacific
 islands that are connected to the rest of the world via a satellite link.
 
@@ -16,7 +16,7 @@ when there are more packets arriving that it can deal with at the moment. When
 the link throws packets away, the source hosts respond by sending less data for
 a while before attempting to send more again.
 
-On the island side of the satellite link, our simulator eavesdrops on the incoming
+On the island side of the satellite link, the simulator eavesdrops on the incoming
 packets. It stores summary information about each packet in a trace file. The
 trace file is plain text and each line contains the record for exactly one packet
 (more on the file format in the next section).
